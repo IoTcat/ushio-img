@@ -7,7 +7,7 @@ if(!isset($_COOKIE['_token__']) || $_COOKIE['_token__'] != md5(date('Y-m-d-H').$
 }
 */
 
-include '/home/lib/php/anti-ddos.php';
+include '/home/lib/anti-ddos/anti-ddos.php';
 
 anti_ddos();
 
