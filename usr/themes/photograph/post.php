@@ -48,12 +48,12 @@
 		endif;
 		if($this->fields->hiddenMorePic == 1 && $this->fields->hiddenMorePics == $titleflag && !$this->user->hasLogin()):
 ?>
-			<div class="post-item col-xs-<?php echo $_colXs ?> col-sm-<?php echo $_colSm ?> col-md-<?php echo $_colMd ?> col-lg-<?php echo $_colLg ?>"><a class="hidden-more" href="<?php $this->options->adminUrl('login.php?referer='.urlencode($this->permalink)); ?>">登陆后显示更多</a></div>
+			<div class="post-item col-xs-<?php echo $_colXs ?> col-sm-<?php echo $_colSm ?> col-md-<?php echo $_colMd ?> col-lg-<?php echo $_colLg ?>"><a class="hidden-more" href="<?php $this->options->adminUrl('login.php?referer='.urlencode($this->permalink)); ?>"><img class="post-item-img lazy" src="<?php getLazyImg($this->options); ?>" data-original="<?php echo $img['url'].($this->options->detailImgParm ? $this->options->detailImgParm : ''); ?>" alt="<?php echo $this->fields->title == 1 ? $img['name'] : ($this->title.' ['.$titleflag.']'); ?>" title="点此登录浏览更多"><span class="hidden-more-text">点此登录浏览更多</span></a></div>
 <?php
 			break;
 		endif;
 ?>
-		<div data-fancybox="gallery" class="post-item col-xs-<?php echo $_colXs ?> col-sm-<?php echo $_colSm ?> col-md-<?php echo $_colMd ?> col-lg-<?php echo $_colLg ?>" data-src="<?php echo $img['url'].($this->options->detailImgParm ? $this->options->detailImgParm : ''); ?>">
+		<div data-fancybox="gallery" class="post-item col-xs-<?php echo $_colXs ?> col-sm-<?php echo $_colSm ?> col-md-<?php echo $_colMd ?> col-lg-<?php echo $_colLg ?>" data-src="<?php echo $img['url']; ?>">
 			<img class="post-item-img lazy" src="<?php getLazyImg($this->options); ?>" data-original="<?php echo $img['url'].($this->options->detailImgParm ? $this->options->detailImgParm : ''); ?>" alt="<?php echo $this->fields->title == 1 ? $img['name'] : ($this->title.' ['.$titleflag.']'); ?>" title="<?php echo $this->fields->title == 1 ? $img['name'] : ($this->title.' ['.$titleflag++.']'); ?>">
 		</div>
 <?php } ?>

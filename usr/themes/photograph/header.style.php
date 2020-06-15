@@ -21,6 +21,20 @@
 	.item-title {
 		opacity: <?php echo $this->options->coverTitle ?>;
 	}
+	.item-img, .item-title {
+<?php if (!empty($this->options->coverRadius) && in_array('cr_tl', $this->options->coverRadius)): ?>
+		border-top-left-radius: 10px;
+<?php endif; ?>
+<?php if (!empty($this->options->coverRadius) && in_array('cr_tr', $this->options->coverRadius)): ?>
+		border-top-right-radius: 10px;
+<?php endif; ?>
+<?php if (!empty($this->options->coverRadius) && in_array('cr_br', $this->options->coverRadius)): ?>
+		border-bottom-right-radius: 10px;
+<?php endif; ?>
+<?php if (!empty($this->options->coverRadius) && in_array('cr_bl', $this->options->coverRadius)): ?>
+		border-bottom-left-radius: 10px;
+<?php endif; ?>
+	}
 	.item-link-text {
 <?php if (empty($this->options->coverTitleBorder)): ?>
 		border: none;
@@ -84,6 +98,32 @@
 	#side-button {opacity: .7;}
 	#side-button li {border-radius: 20px;}
 <?php endif; ?>
+
+<?php if($this->options->imgHeightTimes): ?>
+.row .post-item {
+	height: <?php echo (($this->options->imgHeightTimes ? (($this->is("post") && $this->fields->thisImgHeightTimes) ? $this->fields->thisImgHeightTimes : $this->options->imgHeightTimes) : 1) * ($this->options->colLg == 3 ? 23 : 16)); ?>vw;
+}
+@media screen and (max-width: 1199px) {
+	.row .post-item {
+		height: <?php echo (($this->options->imgHeightTimes ? (($this->is("post") && $this->fields->thisImgHeightTimes) ? $this->fields->thisImgHeightTimes : $this->options->imgHeightTimes) : 1) * ($this->options->colMd == 4 ? 32 : 23)); ?>vw;
+	}
+}
+@media screen and (max-width: 991px) {
+	.row .post-item {
+		height: <?php echo (($this->options->imgHeightTimes ? (($this->is("post") && $this->fields->thisImgHeightTimes) ? $this->fields->thisImgHeightTimes : $this->options->imgHeightTimes) : 1) * ($this->options->colSm == 6 ? 45 : 32)); ?>vw;
+	}
+}
+@media screen and (max-width: 767px) {
+	.row .post-item {
+		height: <?php echo (($this->options->imgHeightTimes ? (($this->is("post") && $this->fields->thisImgHeightTimes) ? $this->fields->thisImgHeightTimes : $this->options->imgHeightTimes) : 1) * ($this->options->colXs == 12 ? 95 : 45)); ?>vw;
+	}
+}
+.post-item-img {
+	height: 100%;
+	object-fit: cover;
+}
+<?php endif; ?>
+
 /** diyCSS Start **/
 <?php if ($this->options->diyCss): $this->options->diyCss(); endif; ?>
 <?php if ($this->options->firstVisitingCss): $this->options->firstVisitingCss(); endif; ?>

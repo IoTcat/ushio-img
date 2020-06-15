@@ -184,22 +184,36 @@ ul {
 }
 .post-item-img {
 	width: 100%;
+	transition: -webkit-filter .5s, filter .5s;
+}
+.post-item-img:hover {
+	-webkit-filter: drop-shadow(0 0 5px gray);
+	filter: drop-shadow(0 0 5px gray);
 }
 .hidden-more {
 	display: block;
 	color: white;
 	width: 100%;
-	height: 180px;
-	line-height: 180px;
-	text-align: center;
-	font-size: 20px;
-	background-color: #4EEE94;
-	text-decoration: none;
+	height: 100%;
+	background-color: gray;
 }
-.hidden-more:hover {
+.hidden-more-text {
+	display: block;
+	width: 100%;
+	position: absolute;
+	top: calc(50% - 15px);
+	left: 0;
 	color: white;
+	font-size: 20px;
+	line-height: 30px;
+	text-align: center;
 	text-decoration: none;
-	background-color: #00CD66;
+	vertical-align: middle;
+	user-select: none;
+}
+.hidden-more img, .hidden-more img:hover {
+	-webkit-filter: opacity(5%);
+	filter: opacity(5%);
 }
 .password input {
 	margin: 5px auto;
@@ -601,6 +615,49 @@ input[type="text"],input[type="email"],input[type="url"],input[type="password"],
 	top: calc(50vh - 100px);
 	left: calc(50vw - 100px);
 }
+/* toast */
+.toast-wrap {
+	opacity: 0;
+	position: fixed;
+	bottom: 15%;
+	color: #fff;
+	width: 100%;
+	text-align: center;
+}
+.toast-msg {
+	display: block;
+	width: 320px;
+	max-width: 90%;
+	margin: 0 auto;
+	background-color: rgba(0,0,0,0.7);
+	padding: 5px 10px;
+	border-radius: 5px;
+}
+.toastAnimate {
+	animation: toastKF 5s;
+}
+@keyframes toastKF {
+	0% {opacity: 0;}
+	15% {opacity: 1; z-index: 9999}
+	50% {opacity: 1; z-index: 9999}
+	85% {opacity: 1; z-index: 9999}
+	100% {opacity: 0; z-index: 0}
+}
+/* no-data */
+#no-data {
+	width: 100%;
+}
+#no-data div {
+	width: 220px;
+	max-width: 90%;
+	height: 30px;
+	margin: 20px auto;
+	background-color: whitesmoke;
+	border-radius: 30px;
+	color: lightgray;
+	text-align: center;
+	line-height: 30px;
+}
 @media screen and (max-width: 1199px) {
 	.item {
 		height: 23vw;
@@ -645,6 +702,8 @@ input[type="text"],input[type="email"],input[type="url"],input[type="password"],
 /* fancybox 样式修复 */
 .compensate-for-scrollbar { margin-right: 0!important; }
 /* bootstrap 样式修复 */
+.navbar-right #search{ margin: 8px 0; }
+.navbar-fixed-top .navbar-collapse { max-height: fit-content; }
 /*
 .navbar-nav>.open>a { background-color: white!important; }
 .navbar-nav>.open>a:hover { background-color: #e7e7e7!important; }

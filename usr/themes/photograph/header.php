@@ -4,6 +4,7 @@
 <head>
     <meta charset="<?php $this->options->charset(); ?>">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+	<meta name="referrer" content="<?php echo $this->options->referrer == '' ? 'default' : $this->options->referrer; ?>">
 	<meta name="viewport" content="width=device-width,initial-scale=1.0,maximum-scale=1.0,user-scalable=0">
     <meta name="renderer" content="webkit">
 	<meta name="apple-mobile-web-app-capable" content="yes" />
@@ -39,9 +40,6 @@
     		$this->header();
     	}
     ?>
-<link rel="stylesheet" type="text/css" href="https://cdn.yimian.xyz/shaky/shaky.css">
-<script src="https://cdn.yimian.xyz/ushio-js/ushio-head.min.js"></script>
-
 </head>
 <body>
 <!--[if lt IE 8]>

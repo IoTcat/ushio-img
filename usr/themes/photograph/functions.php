@@ -2,17 +2,45 @@
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
 
 function themeConfig($form) {
-	$logo = new Typecho_Widget_Helper_Form_Element_Text('logo', NULL, NULL, _t('网站 LOGO'), _t('网站 logo 图片地址，留空则显示标题。'));
+
+	$divide = '<div style="height: 20px; margin-top: 20px; border-top: solid 1px lightgray;"></div>';
+
+	// 网站信息设置
+
+	$logo = new Typecho_Widget_Helper_Form_Element_Text('logo', NULL, NULL, _t($divide.'网站 LOGO'), _t('网站 logo 图片地址，留空则显示标题。'));
 	$form->addInput($logo);
+
+	$favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', NULL, NULL, _t('站点「图标」设置'), _t('填写站点favicon的路径，用来自定义站点图标。'));
+	$form->addInput($favicon);
 
 	$icp = new Typecho_Widget_Helper_Form_Element_Text('icp', NULL, NULL, _t('大天朝身份认证'), _t('填写 ICP 备案号，留空则不显示。'));
 	$form->addInput($icp);
 
-	$navStyle = new Typecho_Widget_Helper_Form_Element_Radio('navStyle', array('ins' => _t('Ins居中风格(无菜单)'), 'boot' => _t('BootStrap顶部固定导航栏')), 'boot', _t('网站「导航栏」风格设置'), _t('选择站点导航的显示风格。'));
+	$noticeStyle = new Typecho_Widget_Helper_Form_Element_Radio('noticeStyle', array('top' => _t('顶部(带边框可配置颜色)'), 'bottom' => _t('底部(无特殊样式)')), 'bottom', _t('网站公告风格设置'), _t('选择站点公告显示的位置和样式。'));
+	$form->addInput($noticeStyle);
+
+	$noticeColor = new Typecho_Widget_Helper_Form_Element_Radio('noticeColor', array(0 => _t('默认'), 'PaleVioletRed' => '<span style="color: PaleVioletRed">#DB7093</span>', 'orange' => '<span style="color: orange">#FFA500</span>', 'DarkSeaGreen' => '<span style="color: DarkSeaGreen">#8FBC8F</span>', 'SkyBlue' => '<span style="color: SkyBlue">#87CEEB</span>', 'MediumTurquoise' => '<span style="color: MediumTurquoise">#48D1CC</span>', 'MediumOrchid' => '<span style="color: MediumOrchid">#BA55D3</span>', ), 0, _t('网站公告颜色设置'), _t('选择站点公告的显示颜色。'));
+	$form->addInput($noticeColor);
+
+	$notice = new Typecho_Widget_Helper_Form_Element_Textarea('notice', NULL, NULL, _t('网站公告'), _t('填写网站公告，留空则不显示。'));
+	$form->addInput($notice);
+
+	$poweredby = new Typecho_Widget_Helper_Form_Element_Radio('poweredby', array('y' => _t('显示'), 'n' => _t('隐藏')), 'y', _t('Footer Powered …'), _t('是否显示页脚「<a href="http://typecho.org/" target="_blank">POWERED BY TYPECHO</a> / <a href="https://photo.siitake.cn/photograph.html" target="_blank">THEME BY SIITAKE</a>」信息。'));
+	$form->addInput($poweredby);
+
+	$statCount = new Typecho_Widget_Helper_Form_Element_Radio('statCount', array('n' => _t('停用'), 'y' => _t('启用')), 'n', _t('全站信息统计'), _t('是否启用全站信息统计（将统计全站分类、文章、页面、评论以及附件和文章内容中的图片数量，可能会增加主机负担）。'));
+	$form->addInput($statCount);
+
+	// 界面设置
+
+	$navStyle = new Typecho_Widget_Helper_Form_Element_Radio('navStyle', array('ins' => _t('Ins居中风格(无菜单)'), 'boot' => _t('BootStrap顶部固定导航栏')), 'boot', _t($divide.'网站「导航栏」风格设置'), _t('选择站点导航的显示风格。'));
 	$form->addInput($navStyle);
 
 	$isFoldCate = new Typecho_Widget_Helper_Form_Element_Radio('isFoldCate', array('y' => _t('折叠'), 'n' => _t('展开')), 'n', _t('是否折叠「分类」菜单'), _t('选择是否折叠显示导航栏上的分类列表菜单。'));
 	$form->addInput($isFoldCate);
+
+	$diyNav = new Typecho_Widget_Helper_Form_Element_Textarea('diyNav', NULL, NULL, _t('自定导航栏菜单'), _t('如果您需要自定义添加导航栏菜单，请按照「名称|地址|是否新窗口打开(true/false)」的格式，一行一个填在此处，<a href="javascript:;" onclick="diyNavDemo(this.parentNode.parentNode.children[1])">点我填入演示菜单</a>。'));
+	$form->addInput($diyNav);
 
 	$isHideSet = new Typecho_Widget_Helper_Form_Element_Radio('isHideSet', array('y' => _t('隐藏'), 'n' => _t('显示')), 'n', _t('导航栏「设置」入口'), _t('选择是否隐藏前台导航栏「设置」入口（大屏模式下如果隐藏则搜索栏右对齐）。'));
 	$form->addInput($isHideSet);
@@ -35,13 +63,29 @@ function themeConfig($form) {
 	$coverHeightTimes = new Typecho_Widget_Helper_Form_Element_Text('coverHeightTimes', NULL, '1.0', _t('封面高度设置'), _t('基于默认「正方形」状态下的高度倍数设置，默认1倍高度。'));
 	$form->addInput($coverHeightTimes);
 
+	$imgHeightTimes = new Typecho_Widget_Helper_Form_Element_Text('imgHeightTimes', NULL, '1.0', _t('全局内容图片统一尺寸设置'), _t('基于默认「正方形」状态下的高度倍数设置，默认1倍高度。使用此功能后图片不会被裁剪，但会居中适应显示，且文章中设置了「不一样の列」的图片高度也将受到限制。'));
+	$form->addInput($imgHeightTimes);
+
 	$coverTitle = new Typecho_Widget_Helper_Form_Element_Radio('coverTitle', array('1' => _t('显示'), '0.5' => _t('显示(50%透明)'), '0' => _t('隐藏')), 1, _t('封面标题默认状态'), _t('选择是否默认显示封面标题、内容图片数量等信息。'));
 	$form->addInput($coverTitle);
 
-	$coverTitleBorder = new Typecho_Widget_Helper_Form_Element_Checkbox('coverTitleBorder', array('ctb_t' => _t('border-top'), 'ctb_r' => _t('border-right'), 'ctb_b' => _t('border-bottom'), 'ctb_l' => _t('border-left'),), array('ctb_t', 'ctb_r', 'ctb_b', 'ctb_l'), _t('封面标题边框设置'), _t('分别设置封面标题框四个方向是否显示。'));
+	$btlrHtml = '<div class="border-normal" style="border-top-left-radius: 7px; border-color: red gray gray red;"></div>';
+	$btrrHtml = '<div class="border-normal" style="border-top-right-radius: 7px; border-color: red red gray gray;"></div>';
+	$bbrrHtml = '<div class="border-normal" style="border-bottom-right-radius: 7px; border-color: gray red red gray;"></div>';
+	$bblrHtml = '<div class="border-normal" style="border-bottom-left-radius: 7px; border-color: gray gray red red;"></div>';
+
+	$coverRadius = new Typecho_Widget_Helper_Form_Element_Checkbox('coverRadius', array('cr_tl' => _t('ＴＬ'.$btlrHtml), 'cr_tr' => _t('ＴＲ'.$btrrHtml), 'cr_br' => _t('ＢＲ'.$bbrrHtml), 'cr_bl' => _t('ＢＬ'.$bblrHtml),), array('cr_tl', 'cr_tr', 'cr_br', 'cr_bl'), _t('封面圆角设置'), _t('分别设置封面四个角是否显示为圆角。'));
+	$form->addInput($coverRadius->multiMode());
+
+	$btHtml = '<div class="border-normal" style="width: 20px; border-top-color: red;"></div>';
+	$brHtml = '<div class="border-normal" style="width: 20px; border-right-color: red;"></div>';
+	$bbHtml = '<div class="border-normal" style="width: 20px; border-bottom-color: red;"></div>';
+	$blHtml = '<div class="border-normal" style="width: 20px; border-left-color: red;"></div>';
+
+	$coverTitleBorder = new Typecho_Widget_Helper_Form_Element_Checkbox('coverTitleBorder', array('ctb_t' => _t('Ｔ'.$btHtml), 'ctb_r' => _t('Ｒ'.$brHtml), 'ctb_b' => _t('Ｂ'.$bbHtml), 'ctb_l' => _t('Ｌ'.$blHtml),), array('ctb_t', 'ctb_r', 'ctb_b', 'ctb_l'), _t('封面标题边框设置'), _t('分别设置封面标题框四个方向是否显示。'));
 	$form->addInput($coverTitleBorder->multiMode());
 
-	$coverTitleRadius = new Typecho_Widget_Helper_Form_Element_Checkbox('coverTitleRadius', array('ctr_tl' => _t('border-top-left-radius'), 'ctr_tr' => _t('border-top-right-radius'), 'ctr_br' => _t('border-bottom-right-radius'), 'ctr_bl' => _t('border-bottom-left-radius'),), array('ctr_tl', 'ctr_tr', 'ctr_br', 'ctr_bl'), _t('封面标题圆角设置'), _t('分别设置封面标题框四个角是否显示为圆角。'));
+	$coverTitleRadius = new Typecho_Widget_Helper_Form_Element_Checkbox('coverTitleRadius', array('ctr_tl' => _t('ＴＬ'.$btlrHtml), 'ctr_tr' => _t('ＴＲ'.$btrrHtml), 'ctr_br' => _t('ＢＲ'.$bbrrHtml), 'ctr_bl' => _t('ＢＬ'.$bblrHtml),), array('ctr_tl', 'ctr_tr', 'ctr_br', 'ctr_bl'), _t('封面标题圆角设置'), _t('分别设置封面标题框四个角是否显示为圆角。'));
 	$form->addInput($coverTitleRadius->multiMode());
 
 	$coverOrn = new Typecho_Widget_Helper_Form_Element_Radio('coverOrn', array('co_none' => _t('无装饰'), 'co_cat' => _t('小猫')), 'co_none', _t('封面标题装饰'), _t('选择封面标题框上的装饰挂件，如果标题边框 border-top 设为不显示则该项配置无效。'));
@@ -59,13 +103,45 @@ function themeConfig($form) {
 	$lazyImg = new Typecho_Widget_Helper_Form_Element_Text('lazyImg', NULL, NULL, _t('懒加载图片设置'), _t('填写懒加载 loading 图片地址，留空则显示默认图片。'));
 	$form->addInput($lazyImg);
 
+	$postTags = new Typecho_Widget_Helper_Form_Element_Radio('postTags', array('0' => _t('隐藏'), '1' => _t('显示')), '1', _t('相册标签'), _t('选择是否显示相册（底部）标签。'));
+	$form->addInput($postTags);
+
+	$colorTags = new Typecho_Widget_Helper_Form_Element_Radio('colorTags', array(0 => _t('不彩色'), 1 => _t('不灰色')), 0, _t('设置「标签」样式'), _t('无描述，懒得描述。'));
+	$form->addInput($colorTags);
+
+	$sideButton = new Typecho_Widget_Helper_Form_Element_Radio('sideButton', array('1' => _t('圆角矩形'), '2' => _t('圆角矩形(70%不透明)'), '3' => _t('圆形'), '4' => _t('圆形(70%不透明)')), '3', _t('右下侧功能按钮样式'), _t('设置页面右下侧功能按钮的默认形状和不透明度。'));
+	$form->addInput($sideButton);
+
+	$picdesc = new Typecho_Widget_Helper_Form_Element_Textarea('picdesc', NULL, NULL, _t('组图默认描述'), _t('填写组图的默认描述，优先级低于「自定义字段」的值，留空则显示「未填写」。'));
+	$form->addInput($picdesc);
+
+	$mobileCate = new Typecho_Widget_Helper_Form_Element_Radio('mobileCate', array(0 => _t('不显示'), 1 => _t('显示')), 0, _t('移动（小屏）页面是否显示顶部分类导航'), _t('无描述，懒得描述。'));
+	$form->addInput($mobileCate);
+
+	$randomPostPt = new Typecho_Widget_Helper_Form_Element_Radio('randomPostPt', array(0 => _t('不显示'), 1 => _t('导航栏'), 2 => _t('右下角')), 0, _t('设置「随机文章/相册」入口位置'), _t('无描述，懒得描述。'));
+	$form->addInput($randomPostPt);
+
+	$coverStyle = new Typecho_Widget_Helper_Form_Element_Radio('coverStyle', array('simple' => _t('简单封面（默认）'), 'social' => _t('社交风格')), 'simple', _t('相册封面风格<span style="color:red;">（测试）</span>'), null);
+	$form->addInput($coverStyle);
+
+	$diyCss = new Typecho_Widget_Helper_Form_Element_Textarea('diyCss', NULL, NULL, _t('自定义样式表(CSS)'), _t('如果您需要自定义或覆盖某些样式，请填在此处。'));
+	$form->addInput($diyCss);
+
+	// 功能设置
+
+	$infiniteScroll = new Typecho_Widget_Helper_Form_Element_Radio('infiniteScroll', array('0' => _t('不启用'), '1' => _t('启用')), '0', _t($divide.'无限加载配置 | Infinite Scroll'), _t('配置是否启用列表页无限加载。'));
+	$form->addInput($infiniteScroll);
+
+	$referrer = new Typecho_Widget_Helper_Form_Element_Radio('referrer', array('default' => _t('default'), 'always' => _t('always'), 'origin' => _t('origin'), 'never' => _t('never')), 'default', _t('Referer Meta'), _t('控制页面发送给 server 的 referer 信息。（自杀式配置，会影响网站统计、Typecho评论、文章加密等功能，无特殊需求不建议启用，用于解决例如某博图床403问题）'));
+	$form->addInput($referrer);
+
 	$thumbImgParm = new Typecho_Widget_Helper_Form_Element_Text('thumbImgParm', NULL, NULL, _t('相册封面图片参数设置'), _t('填写相册封面图的预处理参数，适用于各种云存储、对象存储等，如无此需求请留空。'));
 	$form->addInput($thumbImgParm);
 
 	$detailImgParm = new Typecho_Widget_Helper_Form_Element_Text('detailImgParm', NULL, NULL, _t('相册详情图片参数设置'), _t('填写相册详情图的预处理参数，适用于各种云存储、对象存储等，如无此需求请留空。'));
 	$form->addInput($detailImgParm);
 
-	$lightBoxCho = new Typecho_Widget_Helper_Form_Element_Radio('lightBoxCho', array('fb3' => _t('fancybox3'), 'lg' => _t('lightGallery')), 'fb3', _t('图片「灯箱」选择'), _t('选择用于展示图片详情的插件。'));
+	$lightBoxCho = new Typecho_Widget_Helper_Form_Element_Radio('lightBoxCho', array('fb3' => _t('fancybox3（推荐）'), 'lg' => _t('lightGallery')), 'fb3', _t('图片「灯箱」选择'), _t('选择用于展示图片详情的插件。'));
 	$form->addInput($lightBoxCho);
 
 	$fancyBox3Opt = new Typecho_Widget_Helper_Form_Element_Checkbox('fancyBox3Opt',  array('fb3_zoom' => _t('缩放功能'), 'fb3_share' => _t('分享功能（外媒）'), 'fb3_slideShow' => _t('自动播放'), 'fb3_fullScreen' => _t('全屏功能'), 'fb3_download' => _t('下载按钮'), 'fb3_thumbs' => _t('缩略图列表'), 'fb3_close' => _t('关闭按钮')), array('fb3_download', 'fb3_thumbs', 'fb3_close'), _t('fancybox3 功能开关'), _t('注意：若「灯箱」选择了「lightGallery」则该组选项不生效。'));
@@ -74,56 +150,11 @@ function themeConfig($form) {
 	$lightGalleryOpt = new Typecho_Widget_Helper_Form_Element_Checkbox('lightGalleryOpt', array('lg_pager' => _t('页码指示器'), 'lg_autoplay' => _t('自动播放功能'), 'lg_fullscreen' => _t('全屏功能'), 'lg_zoom' => _t('缩放功能'), 'lg_download' => _t('下载按钮'), 'lg_thumbnail' => _t('缩略图列表（建议与页码指示器互斥使用）')), array('lg_autoplay', 'lg_fullscreen', 'lg_zoom', 'lg_thumbnail'), _t('lightGallery 功能开关'), _t('注意：若「灯箱」选择了「fancybox3」则该组选项不生效。'));
 	$form->addInput($lightGalleryOpt->multiMode());
 
-	$noticeStyle = new Typecho_Widget_Helper_Form_Element_Radio('noticeStyle', array('top' => _t('顶部(带边框可配置颜色)'), 'bottom' => _t('底部(无特殊样式)')), 'bottom', _t('网站公告风格设置'), _t('选择站点公告显示的位置和样式。'));
-	$form->addInput($noticeStyle);
-
-	$noticeColor = new Typecho_Widget_Helper_Form_Element_Radio('noticeColor', array(0 => _t('默认'), 'PaleVioletRed' => '<span style="color: PaleVioletRed">#DB7093</span>', 'orange' => '<span style="color: orange">#FFA500</span>', 'DarkSeaGreen' => '<span style="color: DarkSeaGreen">#8FBC8F</span>', 'SkyBlue' => '<span style="color: SkyBlue">#87CEEB</span>', 'MediumTurquoise' => '<span style="color: MediumTurquoise">#48D1CC</span>', 'MediumOrchid' => '<span style="color: MediumOrchid">#BA55D3</span>', ), 0, _t('网站公告颜色设置'), _t('选择站点公告的显示颜色。'));
-	$form->addInput($noticeColor);
-
-	$notice = new Typecho_Widget_Helper_Form_Element_Textarea('notice', NULL, NULL, _t('网站公告'), _t('填写网站公告，留空则不显示。'));
-	$form->addInput($notice);
-
-	$poweredby = new Typecho_Widget_Helper_Form_Element_Radio('poweredby', array('y' => _t('显示'), 'n' => _t('隐藏')), 'y', _t('Footer Powered …'), _t('是否显示页脚「<a href="http://typecho.org/" target="_blank">POWERED BY TYPECHO</a> / <a href="https://photo.siitake.cn/photograph.html" target="_blank">THEME BY SIITAKE</a>」信息。'));
-	$form->addInput($poweredby);
-
-	$statCount = new Typecho_Widget_Helper_Form_Element_Radio('statCount', array('n' => _t('停用'), 'y' => _t('启用')), 'n', _t('全站信息统计'), _t('是否启用全站信息统计（将统计全站分类、文章、页面、评论以及附件和文章内容中的图片数量，可能会增加主机负担）。'));
-	$form->addInput($statCount);
-
 	$statistics = new Typecho_Widget_Helper_Form_Element_Textarea('statistics', NULL, NULL, _t('统计代码'), _t('填写统计平台生成的统计代码，该内容在页面隐藏生效，留空则不生效。'));
 	$form->addInput($statistics);
 
-	$postTags = new Typecho_Widget_Helper_Form_Element_Radio('postTags', array('0' => _t('隐藏'), '1' => _t('显示')), '1', _t('相册标签'), _t('选择是否显示相册（底部）标签。'));
-	$form->addInput($postTags);
-
-	$sideButton = new Typecho_Widget_Helper_Form_Element_Radio('sideButton', array('1' => _t('圆角矩形'), '2' => _t('圆角矩形(70%不透明)'), '3' => _t('圆形'), '4' => _t('圆形(70%不透明)')), '3', _t('右下侧功能按钮样式'), _t('设置页面右下侧功能按钮的默认形状和不透明度。'));
-	$form->addInput($sideButton);
-
-	$picdesc = new Typecho_Widget_Helper_Form_Element_Textarea('picdesc', NULL, NULL, _t('组图默认描述'), _t('填写组图的默认描述，优先级低于「自定义字段」的值，留空则显示「未填写」。'));
-	$form->addInput($picdesc);
-
-	$diyCss = new Typecho_Widget_Helper_Form_Element_Textarea('diyCss', NULL, NULL, _t('自定义样式表(CSS)'), _t('如果您需要自定义或覆盖某些样式，请填在此处。'));
-	$form->addInput($diyCss);
-
-	$wholeSrc = new Typecho_Widget_Helper_Form_Element_Radio('wholeSrc', array(0 => _t('附件(默认不生效)'), 1 => _t('内容'), 2 => _t('附件+内容')), 0, _t('全局图片源选项（慎用）'), _t('全局设置相册详情图的来源，选择后两项则「自定义字段」处的「图片源」选项不生效。<span style="color:red;">如无特殊需求请保持此选项为默认值</span>。'));
+	$wholeSrc = new Typecho_Widget_Helper_Form_Element_Radio('wholeSrc', array(0 => _t('附件(默认)'), 1 => _t('内容'), 2 => _t('附件+内容')), 0, _t('全局图片源选项（慎用）'), _t('全局设置相册详情图的来源，选择后两项则「自定义字段」处的「图片源」选项不生效。<span style="color:red;">如无特殊需求请保持此选项为默认值。</span>'));
 	$form->addInput($wholeSrc);
-
-	$coverStyle = new Typecho_Widget_Helper_Form_Element_Radio('coverStyle', array('simple' => _t('简单封面（默认）'), 'social' => _t('社交风格')), 'simple', _t('相册封面风格（测试）'), _t('测试功能。'));
-	$form->addInput($coverStyle);
-
-	$diyNav = new Typecho_Widget_Helper_Form_Element_Textarea('diyNav', NULL, NULL, _t('自定导航栏菜单'), _t('如果您需要自定义添加导航栏菜单，请按照「名称|地址|是否新窗口打开(true/false)」的格式，一行一个填在此处，<a href="javascript:;" onclick="diyNavDemo(this.parentNode.parentNode.children[1])">点我填入演示菜单</a>。'));
-	$form->addInput($diyNav);
-
-	$mobileCate = new Typecho_Widget_Helper_Form_Element_Radio('mobileCate', array(0 => _t('不显示'), 1 => _t('显示')), 0, _t('移动（小屏）页面是否显示顶部分类导航'), _t('无描述，懒得描述。'));
-	$form->addInput($mobileCate);
-
-	$randomPostPt = new Typecho_Widget_Helper_Form_Element_Radio('randomPostPt', array(0 => _t('不显示'), 1 => _t('导航栏'), 2 => _t('右下角')), 0, _t('设置「随机文章/相册」入口位置'), _t('无描述，懒得描述。'));
-	$form->addInput($randomPostPt);
-
-	$favicon = new Typecho_Widget_Helper_Form_Element_Text('favicon', NULL, NULL, _t('站点「图标」设置'), _t('填写站点favicon的路径，用来自定义站点图标。'));
-	$form->addInput($favicon);
-
-	$colorTags = new Typecho_Widget_Helper_Form_Element_Radio('colorTags', array(0 => _t('不彩色'), 1 => _t('不灰色')), 0, _t('设置「标签」样式'), _t('无描述，懒得描述。'));
-	$form->addInput($colorTags);
 
 	$firstVisiting = new Typecho_Widget_Helper_Form_Element_Radio('firstVisiting', array(0 => _t('停用'), 1 => _t('启用')), 0, _t('设置「首次访问」提示页'), _t('无描述，懒得描述。'));
 	$form->addInput($firstVisiting);
@@ -138,13 +169,33 @@ function themeConfig($form) {
 	$form->addInput($hotKeys);
 
 	?>
+	<style type="text/css">
+		.typecho-page-main .typecho-option .multiline {
+			display: inline-block;
+			margin-right: 10px;
+		}
+		.border-normal {
+			display: inline-block;
+			position: relative;
+			margin-right: 10px;
+			top: 2px;
+			left: 2px;
+			width: 9px;
+			height: 9px;
+			border: solid 3px gray;
+			border-radius: 2px;
+		}
+	</style>
+	<script type="text/javascript" src="/usr/themes/photograph/js/jquery-3.3.1.min.js"></script>
 	<script type="text/javascript">
 		window.onload = function(){
 			var submitBtn = document.getElementsByClassName("btn primary")[0];
 			submitBtn.style.position = "fixed";
-			submitBtn.style.left = "50px";
+			submitBtn.style.height = "50px";
+			submitBtn.style.right = "50px";
 			submitBtn.style.bottom = "50px";
-			submitBtn.style.backgroundColor = "#66CCFF";
+			submitBtn.style.backgroundColor = "red"; // #66CCFF
+			submitBtn.innerText = "保存\n设置";
 		};
 		var firstVisitingHtmlDemo = function(obj) {
 			var val = '<h1 class="fv-title">FBI WARNING</h1>\n'
@@ -176,9 +227,20 @@ function themeConfig($form) {
 			obj.value = val;
 		}
 	</script>
-	<ul class="typecho-option" id="typecho-option-item-icp-1">
+	<ul class="typecho-option">
 		<li>
-			<label class="typecho-label" for="icp-0-2">设置备份/还原</label>
+			<label class="typecho-label">PHOTOGRAPH～</label>
+			<p class="description">版本信息：<span id="version-info"></span><script>$(function(){ var htmlobj=$.ajax({url: 'https://siitake.cn/tools/photograph/index.php?check=20200610', async: false}); $("#version-info").html(htmlobj.responseText); });</script></p>
+			<p class="description">相关链接：<a href="https://photo.siitake.cn/docs/#/config" target="_blank">配置文档</a> |
+				<a href="https://photo.siitake.cn/docs/#/update" target="_blank">更新日志</a> |
+				<a href="https://photo.siitake.cn/" target="_blank">演示站点</a> |
+				<a href="https://photo.siitake.cn/photograph.html" target="_blank">BUG 反馈</a>
+			</p>
+		</li>
+	</ul>
+	<ul class="typecho-option">
+		<li>
+			<label class="typecho-label">设置备份/还原</label>
 			<form action="<?php Helper::options()->adminUrl('options-theme.php'); ?>" method="post"><input type="submit" name="type" class="btn btn-xs" value="备份模板数据" /><span style="display:inline-block;width:5px;"></span><input type="submit" name="type" class="btn btn-xs" value="还原模板数据" /><span style="display:inline-block;width:5px;"></span><input type="submit" name="type" class="btn btn-xs" value="删除备份数据" /></form>
 	<?php
 	$db = Typecho_Db::get();
@@ -233,6 +295,16 @@ function themeConfig($form) {
 	}
 	?>
 			<p class="description">注：主题设置备份还原功能代码修改自：<a href="https://qqdie.com/archives/typecho-templates-backup-and-restore.html" target="_blank">《typecho模板设置数据备份与恢复》</a>@泽泽。</p>
+		</li>
+	</ul>
+	<ul class="typecho-option">
+		<li>
+			<label class="typecho-label">TYPECHO 设置</label>
+			<a href="/admin/options-general.php"><button type="submit" name="type" class="btn btn-xs">基本设置</button></a><span style="display:inline-block;width:5px;"></span>
+			<a href="/admin/options-discussion.php"><button type="submit" name="type" class="btn btn-xs">评论设置</button></a><span style="display:inline-block;width:5px;"></span>
+			<a href="/admin/options-reading.php"><button type="submit" name="type" class="btn btn-xs">阅读设置</button></a><span style="display:inline-block;width:5px;"></span>
+			<a href="/admin/options-permalink.php"><button type="submit" name="type" class="btn btn-xs">永久链接</button></a>
+			<p class="description">本组设置项与主题本身基本无关，用于配置 Typecho 本身属性，详情请进入各项查看。</p>
 		</li>
 	</ul>
 	<?php
@@ -371,6 +443,16 @@ function thisPageUrl() {
 	return (isset($_SERVER['HTTPS']) ? 'https://' : 'http://').$_SERVER['SERVER_NAME'].$_SERVER['REQUEST_URI'];
 }
 
+//生成二维码
+function getQrcode($url = false, $size = 200) {
+	$qrcodeAction = '/usr/themes/photograph/qrcode.php?size='.$size.'&text=';
+	if($url) {
+		return $qrcodeAction.$url;
+	} else {
+		return $qrcodeAction;
+	}
+}
+
 //后期软件
 function afterSoftware() {
 	return array(
@@ -381,7 +463,7 @@ function afterSoftware() {
 //自定义字段
 if(strpos($_SERVER['SCRIPT_NAME'], "write-post.php")):
 function themeFields($layout) {
-	$postType = new Typecho_Widget_Helper_Form_Element_Radio('postType', array(0 => _t('相册（默认）'), 1 => _t('图文（与单页排版一致）')), 0, _t('「相册/图文」模式选择'), _t('选择前台文章详情的显示方式'));
+	$postType = new Typecho_Widget_Helper_Form_Element_Radio('postType', array(0 => _t('相册（默认）'), 1 => _t('图文（与单页排版一致）')), 0, _t('「相册/图文」模式选择'), _t('选择前台文章详情的显示方式<style>.typecho-list-table textarea, .typecho-list-table input[type="text"] { width: 100%; }</style>'));
 	$layout->addItem($postType);
 
 	$title = new Typecho_Widget_Helper_Form_Element_Select('title', array(_t('文章标题序列'), _t('图片文件名或描述')), NULL, _t('图片[title]'), _t('选择前台图片标签的 title 属性值（图片源为内容的 [title] 默认为文章标题序列）'));
@@ -414,7 +496,7 @@ function themeFields($layout) {
 	$thumb = new Typecho_Widget_Helper_Form_Element_Text('thumb', NULL, NULL, _t('封面图片'), _t('在这里填写封面图片的地址（留空将自动获取第一个附件图片）'));
 	$layout->addItem($thumb);
 
-	$hiddenMorePic = new Typecho_Widget_Helper_Form_Element_Select('hiddenMorePic', array(0 => _t('否'), 1 => _t('是')), 0, _t('是否隐藏部分图片'), _t('相册详情隐藏部分图片并登陆后可见'));
+	$hiddenMorePic = new Typecho_Widget_Helper_Form_Element_Select('hiddenMorePic', array(0 => _t('不隐藏'), 1 => _t('隐藏吧')), 0, _t('是否隐藏部分图片'), _t('相册详情隐藏部分图片并登陆后可见'));
 	$layout->addItem($hiddenMorePic);
 
 	$hiddenMorePics = new Typecho_Widget_Helper_Form_Element_Text('hiddenMorePics', NULL, NULL, _t('隐藏图片位置'), _t('填写整数，从此位置的图片开始隐藏。'));
@@ -422,6 +504,9 @@ function themeFields($layout) {
 
 	$differentCol = new Typecho_Widget_Helper_Form_Element_Text('differentCol', NULL, NULL, _t('设置「不一样の列」'), _t('页面共12列，设置第N张图片超小屏、小屏、中屏、大屏所占列数，示例：<span style="color:red;">2:12,8,6,6</span>。'));
 	$layout->addItem($differentCol);
+
+	$thisImgHeightTimes = new Typecho_Widget_Helper_Form_Element_Text('thisImgHeightTimes', NULL, NULL, _t('本页内容图片统一尺寸设置'), _t('基于默认「正方形」状态下的高度倍数设置，默认1.0倍高度，填写数字即可，例如：<span style="color:red;">1.5</span>。使用此功能后图片不会被裁剪，但会居中适应显示。（此项填写内容后将覆盖「设置外观」中的「全局内容图片统一尺寸设置」项目，且设置了「不一样の列」的图片高度也将受到限制，仅对此文章生效。）'));
+	$layout->addItem($thisImgHeightTimes);
 
 	$readTimes = new Typecho_Widget_Helper_Form_Element_Text('readTimes', NULL, NULL, _t('阅读次数'), _t('记录相册被点击的次数，可手动设置起始阅读量，后续点击会在此基础上自增。'));
 	$layout->addItem($readTimes);

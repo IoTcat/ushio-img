@@ -1,35 +1,37 @@
 <?php if (!defined('__TYPECHO_ROOT_DIR__')) exit; ?>
-
+<div id="no-data"></div>
 <footer class="footer anti-select">
+	<!-- bottom notice -->
 	<?php if ($this->options->notice && $this->options->noticeStyle == 'bottom'): ?>
 	<p class="related" <?php if($this->options->noticeColor): ?>style="color: <?php $this->options->noticeColor() ?>"<?php endif; ?>>公告：<?php $this->options->notice() ?></p>
 	<?php endif; ?>
+	<!-- powered info -->
+	<?php if ($this->options->poweredby == 'y'): ?>
+	<p class="related"><a href="http://typecho.org/" target="_blank">POWERED BY TYPECHO</a> / <a href="https://photo.siitake.cn/photograph.html" target="_blank">THEME BY SIITAKE</a></p>
+	<?php endif; ?>
+	<!-- kotkeys desc -->
 	<?php if(trim($this->options->hotKeys) != ''):
 		$hotKeys = getHotKeys($this->options->hotKeys);
-		$hotKeysDesc = "快捷键：";
+		$hotKeysDesc = "";
 		foreach ($hotKeys as $hotKey):
 			$hotKeysDesc .= "$hotKey[1]($hotKey[0])&nbsp;";
 		endforeach;
 	?>
 	<p class="related"><?php echo $hotKeysDesc; ?></p>
 	<?php endif; ?>
-	<?php if ($this->options->poweredby == 'y'): ?>
-	<p class="related"><a href="mailto:i@iotcat.me">侵删</a></p>
-	<p class="related">Powered with <i style="color:#f00;" class="glyphicon glyphicon-heart shaky"></i> By <a id="ushio-ushio" href="https://ushio.xyz">Ushio</a> | Theme By <a href="https://photo.siitake.cn/photograph.html" target="_blank">SIITAKE</a>/<a id="ushio-iotcatme" href="https://iotcat.me">IoTcat</a></p>
-	<?php endif; ?>
+	<!-- counter -->
 	<?php if ($this->options->statCount == 'y'): $stat = statCount(); ?>
-	<p class="related">本站已收录<span id="imgNum">☹</span>张图片，感谢大家的支持~<!--在<?php //echo $stat['post'] ?>个相册中，他们被分成<?php //echo $stat['cate'] ?>个类别，并有<?php //echo $stat['page'] ?>个页面和<?php// echo $stat['comm'] ?>条评论--></p>
+	<p class="related">本站共<?php echo $stat['pic'] ?>张图片在<?php echo $stat['post'] ?>个相册中，他们被分成<?php echo $stat['cate'] ?>个类别，并有<?php echo $stat['page'] ?>个页面和<?php echo $stat['comm'] ?>条评论</p>
 	<?php endif; ?>
-	<p class="related">&copy; <a href="<?php $this->options->siteUrl(); ?>" target="_blank"><?php $this->options->title(); ?></a><?php if ($this->options->icp): ?> <a href="http://www.miitbeian.gov.cn/" target="_blank"><?php $this->options->icp() ?></a><?php endif; ?></p>
+	<!-- copy & icp -->
+	<p class="related">&copy; <a href="<?php $this->options->siteUrl(); ?>" target="_blank"><?php $this->options->title(); ?></a><?php if ($this->options->icp): ?> <a href="http://beian.miit.gov.cn/" target="_blank"><?php $this->options->icp() ?></a><?php endif; ?></p>
 	<?php if ($this->options->statistics): echo '<div style="display:none;">'; $this->options->statistics(); echo '</div>'; endif; ?>
 </footer><!-- end #footer -->
-<script src="https://cdn.bootcss.com/jquery/3.3.1/jquery.min.js"></script>
-<!--<script type="text/javascript" src="<?php//$this->options->themeUrl('js/jquery-3.3.1.min.js'); ?>"></script>-->
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js" integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa" crossorigin="anonymous"></script>
-<!--<script type="text/javascript" src="<?php //$this->options->themeUrl('bootstrap3/js/bootstrap.min.js'); ?>"></script>-->
-<script src="https://cdn.bootcss.com/jquery_lazyload/1.9.7/jquery.lazyload.min.js"></script>
-<!--<script type="text/javascript" src="<?php// $this->options->themeUrl('js/jquery.lazyload.js'); ?>"></script>-->
+<script type="text/javascript" src="<?php $this->options->themeUrl('js/jquery-3.3.1.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php $this->options->themeUrl('bootstrap3/js/bootstrap.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php $this->options->themeUrl('js/jquery.lazyload.js'); ?>"></script>
 <script type="text/javascript" src="<?php $this->options->themeUrl('js/masonry-docs.min.js'); ?>"></script>
+<script type="text/javascript" src="<?php $this->options->themeUrl('js/infinite-scroll.pkgd.min.js'); ?>"></script>
 <script type="text/javascript" src="<?php $this->options->themeUrl('js/shortcut.js'); ?>"></script>
 
 <?php if($this->options->lightBoxCho == 'lg'): ?>
@@ -102,7 +104,7 @@
 			}
 		})
 	<?php endif; ?>
-  });
+	});
 <?php endif; ?>
 	//lazyload
 	$(function() {
@@ -160,6 +162,32 @@
 			return false;
 		});
 	});
+<?php if($this->options->infiniteScroll == '1'): ?>
+	// infinite scroll
+	// https://infinite-scroll.com/
+	if ($('a').is('ol.page-navigator li.next a')) {
+		var $grid = $('#masonry').masonry({
+			itemSelector: '.item',
+			gutter: 0,
+			isAnimated: false,
+		});
+		var msnry = $grid.data('masonry');
+		$grid.infiniteScroll({
+			path : "ol.page-navigator li.next a",
+			append : "#masonry div.item",
+			hideNav: 'ol.page-navigator',
+			history: false,
+			prefill: true,
+			outlayer: msnry,
+		});
+		$grid.on('append.infiniteScroll', function( event, response, path) {
+			$("img.lazy").lazyload();
+		});
+		$grid.on('last.infiniteScroll', function( event, response, path ) {
+			$('#no-data').html('<div>😋已经到底啦！</div>');
+		});
+	}
+<?php endif; ?>
 	//cookie opt
 	//代码修改自 https://www.cnblogs.com/shizhouyu/p/3963122.html
 	var cookieSet = function(key,val,time) { //设置cookie方法
@@ -188,7 +216,9 @@
 		document.cookie = key + "=v; expires =" + date.toGMTString(); //设置cookie
 	}
 	//random post link
+	<?php if($this->options->randomPostPt != 0): ?>
 	var randomPost = '<?php randomPost(); ?>';
+	<?php endif; ?>
 <?php if(trim($this->options->hotKeys) != ''): ?>
 	//hotkey
 	<?php $hotKeys = getHotKeys($this->options->hotKeys); ?>
@@ -205,9 +235,10 @@
 <?php endif; ?>
 	//qrcode
 	var qrcodeDiv = $('<div id="qrcode" onclick="hiddQrcode()"></div>');
-	<?php echo 'var thisPageUrl = "'.thisPageUrl().'";'; ?>
-	<?php echo 'var qrcodeSrc = "'; $this->options->themeUrl('qrcode.php'); echo '?text=" + encodeURI(thisPageUrl) + "&size=200";'; ?>
-	var qrcodeImg = $('<img src="' + qrcodeSrc + '">');
+	var thisPageUrl = "<?php echo thisPageUrl(); ?>";
+	var qrcodeSrc = "<?php echo getQrcode(); ?>" + encodeURI(thisPageUrl);
+	var qrcodeImg = $('<img>');
+	qrcodeImg.attr("src", qrcodeSrc);
 	qrcodeDiv.append(qrcodeImg); $('body').append(qrcodeDiv);
 	var showQrcode = function() {
 		$("#qrcode").css("display", "block");
@@ -215,16 +246,18 @@
 	var hiddQrcode = function() {
 		$("#qrcode").css("display", "none");
 	}
+	// toast
+	var toast = function (msg) {
+		setTimeout(function(){
+			var toastWrap = $('<div class="toast-wrap"></div>');
+			var toastMsg = $('<span class="toast-msg"></span>');
+			toastMsg.html(msg);
+			toastWrap.append(toastMsg);
+			$('body').append(toastWrap);
+			toastWrap.addClass('toastAnimate');
+		},200);
+	}
 </script>
 <?php $this->footer(); ?>
 </body>
-
-<script src="https://cdn.yimian.xyz/ushio-js/ushio-footer.min.js"></script>
-<script type="text/javascript">
-	$.post("https://api.yimian.xyz/getImgNum.php", function(res){
-
-		$('#imgNum').html(JSON.parse(res).total);
-	});
-</script>
-
 </html>
