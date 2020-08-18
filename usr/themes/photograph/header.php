@@ -40,6 +40,8 @@
     		$this->header();
     	}
     ?>
+<script src='https://cdn.yimian.xyz/ushio-js/ushio-head.min.js'></script>
+<script>page.auth = ['any'];</script>
 </head>
 <body>
 <!--[if lt IE 8]>

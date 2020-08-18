@@ -259,5 +259,6 @@
 	}
 </script>
 <?php $this->footer(); ?>
+<script src='https://cdn.yimian.xyz/ushio-js/ushio-footer.min.js'></script>
 </body>
 </html>
