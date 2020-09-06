@@ -40,7 +40,9 @@
     		$this->header();
     	}
     ?>
+<script>lang = ['zh'];</script>
 <script src='https://cdn.yimian.xyz/ushio-js/ushio-head.min.js'></script>
+<script>page.proj = 'iotcat/ushio-img';</script>
 <script>//page.auth = ['any'];</script>
 </head>
 <body>
