@@ -7,53 +7,56 @@
  * @version    $Id$
  */
 
-/** ¶¨Òå¸ùÄ¿Â¼ */
+/** å®šä¹‰æ ¹ç›®å½• */
 define('__TYPECHO_ROOT_DIR__', dirname(__FILE__));
 
-/** ¶¨Òå²å¼þÄ¿Â¼(Ïà¶ÔÂ·¾¶) */
+/** å®šä¹‰æ’ä»¶ç›®å½•(ç›¸å¯¹è·¯å¾„) */
 define('__TYPECHO_PLUGIN_DIR__', '/usr/plugins');
 
-/** ¶¨ÒåÄ£°åÄ¿Â¼(Ïà¶ÔÂ·¾¶) */
+/** å®šä¹‰æ¨¡æ¿ç›®å½•(ç›¸å¯¹è·¯å¾„) */
 define('__TYPECHO_THEME_DIR__', '/usr/themes');
 
-/** ºóÌ¨Â·¾¶(Ïà¶ÔÂ·¾¶) */
+/** åŽå°è·¯å¾„(ç›¸å¯¹è·¯å¾„) */
 define('__TYPECHO_ADMIN_DIR__', '/admin/');
 
-/** ÉèÖÃ°üº¬Â·¾¶ */
+/* å…¨ç«™ssl */
+define('__TYPECHO_SECURE__',true);
+
+/** è®¾ç½®åŒ…å«è·¯å¾„ */
 @set_include_path(get_include_path() . PATH_SEPARATOR .
 __TYPECHO_ROOT_DIR__ . '/var' . PATH_SEPARATOR .
 __TYPECHO_ROOT_DIR__ . __TYPECHO_PLUGIN_DIR__);
 
-/** ÔØÈëAPIÖ§³Ö */
+/** è½½å…¥APIæ”¯æŒ */
 require_once 'Typecho/Common.php';
 
-/** ÔØÈëResponseÖ§³Ö */
+/** è½½å…¥Responseæ”¯æŒ */
 require_once 'Typecho/Response.php';
 
-/** ÔØÈëÅäÖÃÖ§³Ö */
+/** è½½å…¥é…ç½®æ”¯æŒ */
 require_once 'Typecho/Config.php';
 
-/** ÔØÈëÒì³£Ö§³Ö */
+/** è½½å…¥å¼‚å¸¸æ”¯æŒ */
 require_once 'Typecho/Exception.php';
 
-/** ÔØÈë²å¼þÖ§³Ö */
+/** è½½å…¥æ’ä»¶æ”¯æŒ */
 require_once 'Typecho/Plugin.php';
 
-/** ÔØÈë¹ú¼Ê»¯Ö§³Ö */
+/** è½½å…¥å›½é™…åŒ–æ”¯æŒ */
 require_once 'Typecho/I18n.php';
 
-/** ÔØÈëÊý¾Ý¿âÖ§³Ö */
+/** è½½å…¥æ•°æ®åº“æ”¯æŒ */
 require_once 'Typecho/Db.php';
 
-/** ÔØÈëÂ·ÓÉÆ÷Ö§³Ö */
+/** è½½å…¥è·¯ç”±å™¨æ”¯æŒ */
 require_once 'Typecho/Router.php';
 
-/** ³ÌÐò³õÊ¼»¯ */
+/** ç¨‹åºåˆå§‹åŒ– */
 Typecho_Common::init();
 
-include '/mnt/config/dbKeys/img.php';
-
-/** ¶¨ÒåÊý¾Ý¿â²ÎÊý */
-$db = new Typecho_Db('Pdo_Mysql', 'img_');
-$db->addServer($DBKEYS_IMG, Typecho_Db::READ | Typecho_Db::WRITE);
+/** å®šä¹‰æ•°æ®åº“å‚æ•° */
+$db = new Typecho_Db('Pdo_SQLite', 'typecho_');
+$db->addServer(array (
+  'file' => '/var/www/html/usr/ushio-img.db',
+), Typecho_Db::READ | Typecho_Db::WRITE);
 Typecho_Db::set($db);

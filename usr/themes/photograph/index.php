@@ -10,7 +10,7 @@
 if (!defined('__TYPECHO_ROOT_DIR__')) exit;
  $this->need('header.php');
 ?>
-<script type="text/javascript">console.log("Photograph Theme for Typecho 1.1, By: siitake, v20200610, build(crazytest.2020061002)");</script>
+
 <div class="content">
 	<div id="masonry" class="row">
 		<?php $this->need('index.list.php'); ?>

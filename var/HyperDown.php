@@ -179,10 +179,9 @@ class HyperDown
      * parse
      *
      * @param string $text
-     * @param bool $inline
      * @return string
      */
-    private function parse($text, $inline = false)
+    private function parse($text)
     {
         $blocks = $this->parseBlock($text, $lines);
         $html = '';
@@ -197,12 +196,6 @@ class HyperDown
             $result = $this->call('after' . ucfirst($method), $result, $value);
 
             $html .= $result;
-        }
-
-        // inline mode for single normal block
-        if ($inline && count($blocks) == 1 && $blocks[0][0] == 'normal') {
-            // remove p tag
-            $html = preg_replace("/^\s*<p>(.*)<\/p>\s*$/", "\\1", $html);
         }
 
         return $html;
@@ -270,17 +263,6 @@ class HyperDown
             function ($matches) use ($self) {
                 return  $matches[1] . $self->makeHolder(
                     '<code>' . htmlspecialchars($matches[3]) . '</code>'
-                );
-            },
-            $text
-        );
-
-        // mathjax
-        $text = preg_replace_callback(
-            "/(^|[^\\\])(\\$+)(.+?)\\2/",
-            function ($matches) use ($self) {
-                return  $matches[1] . $self->makeHolder(
-                    $matches[2] . htmlspecialchars($matches[3]) . $matches[2]
                 );
             },
             $text
@@ -414,7 +396,7 @@ class HyperDown
         // autolink url
         if ($enableAutoLink) {
             $text = preg_replace_callback(
-                "/(^|[^\"])((https?):[\p{L}_0-9-\.\/%#!@\?\+=~\|\,&\(\)]+)($|[^\"])/iu",
+                "/(^|[^\"])((https?):[x80-xff_a-z0-9-\.\/%#!@\?\+=~\|\,&\(\)]+)($|[^\"])/i",
                 function ($matches) use ($self) {
                     $link = $self->call('parseLink', $matches[2]);
                     return "{$matches[1]}<a href=\"{$matches[2]}\">{$link}</a>{$matches[4]}";
@@ -533,7 +515,7 @@ class HyperDown
             $block = $this->getBlock();
 
             // code block is special
-            if (preg_match("/^(\s*)(~{3,}|`{3,})([^`~]*)$/i", $line, $matches)) {
+            if (preg_match("/^(\s*)(~|`){3,}([^`~]*)$/i", $line, $matches)) {
                 if ($this->isBlock('code')) {
                     $isAfterList = $block[3][2];
 
@@ -567,7 +549,7 @@ class HyperDown
 
             // super html mode
             if ($this->_html) {
-                if (preg_match("/^(\s*)!!!(\s*)$/", $line, $matches)) {
+                if (preg_match("/^(\s*)!!!(\s*)$/i", $line, $matches)) {
                     if ($this->isBlock('shtml')) {
                         $this->setBlock($key)->endBlock();
                     } else {
@@ -579,20 +561,6 @@ class HyperDown
                     $this->setBlock($key);
                     continue;
                 }
-            }
-
-            // mathjax mode
-            if (preg_match("/^(\s*)\\$\\$(\s*)$/", $line, $matches)) {
-                if ($this->isBlock('math')) {
-                    $this->setBlock($key)->endBlock();
-                } else {
-                    $this->startBlock('math', $key);
-                }
-
-                continue;
-            } else if ($this->isBlock('math')) {
-                $this->setBlock($key);
-                continue;
             }
 
             // html block is special too
@@ -928,17 +896,6 @@ class HyperDown
     }
 
     /**
-     * parseMath
-     *
-     * @param array $lines
-     * @return string
-     */
-    private function parseMath(array $lines)
-    {
-        return '<p>' . htmlspecialchars(implode("\n", $lines)) . '</p>';
-    }
-
-    /**
      * parseSh
      *
      * @param array $lines
@@ -1025,7 +982,7 @@ class HyperDown
                     $leftLines[] = preg_replace("/^\s{" . $secondMinSpace . "}/", '', $line);
                 } else {
                     if (!empty($leftLines)) {
-                        $html .= "<li>" . $this->parse(implode("\n", $leftLines), true) . "</li>";
+                        $html .= "<li>" . $this->parse(implode("\n", $leftLines)) . "</li>";
                     }
 
                     if ($lastType != $type) {
@@ -1045,7 +1002,7 @@ class HyperDown
         }
 
         if (!empty($leftLines)) {
-            $html .= "<li>" . $this->parse(implode("\n", $leftLines), true) . "</li></{$lastType}>";
+            $html .= "<li>" . $this->parse(implode("\n", $leftLines)) . "</li></{$lastType}>";
         }
 
         return $html;

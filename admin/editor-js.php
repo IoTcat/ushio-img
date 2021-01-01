@@ -75,15 +75,10 @@ $(document).ready(function () {
         'pre'           :  'pre|code'
     });
 
-    converter.hook('beforeParseInline', function (html) {
-        return html.replace(/^\s*<!\-\-\s*more\s*\-\->\s*$/, function () {
-            return converter.makeHolder('<!--more-->');
-        });
-    });
-
     // 自动跟随
     converter.hook('makeHtml', function (html) {
-        html = html.replace('<p><!--more--></p>', '<!--more-->');
+        // convert all comment
+        html = html.replace(/&lt;!--(.+?)--&gt;/g, '<!--$1-->');
         
         if (html.indexOf('<!--more-->') > 0) {
             var parts = html.split(/\s*<\!\-\-more\-\->\s*/),

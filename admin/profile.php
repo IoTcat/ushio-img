@@ -18,8 +18,7 @@ $stat = Typecho_Widget::widget('Widget_Stat');
                 $stat->myPublishedPostsNum, $stat->myPublishedCommentsNum, $stat->categoriesNum); ?></p>
                 <p><?php
                 if ($user->logged > 0) {
-                    $logged = new Typecho_Date($user->logged);
-                    _e('最后登录: %s', $logged->word());
+                    _e('最后登录: %s', Typecho_I18n::dateWord($user->logged  + $options->timezone, $options->gmtTime + $options->timezone));
                 }
                 ?></p>
             </div>

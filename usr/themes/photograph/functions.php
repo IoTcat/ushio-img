@@ -360,7 +360,15 @@ function getPostHtmImg($obj) {
 	$atts = array();
 	if(isset($matches[1][0])) {
 		for($i = 0; $i < count($matches[1]); $i++) {
-			$atts[] = array('name' => $obj->title.' ['.($i + 1).']', 'url' => $matches[1][$i]);
+            if(substr($matches[1][$i], 0, 35) == 'https://api.yimian.xyz/img/list.php') {
+                try{
+                    $atts = array_merge($atts, json_decode(file_get_contents($matches[1][$i], false, stream_context_create(array(
+                        "ssl"=>array("verify_peer"=>false, "verify_peer_name"=>false)
+                    ))), true));
+                }catch(Exception $e){}
+            } else {
+                $atts[] = array('name' => $obj->title.' ['.($i + 1).']', 'url' => $matches[1][$i]);
+            }
 		}
     }
 	return  count($atts) ? $atts : NULL;

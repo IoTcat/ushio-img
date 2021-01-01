@@ -26,12 +26,12 @@ class Typecho_Date
     public static $serverTimezoneOffset = 0;
 
     /**
-     * 当前的服务器时间戳
+     * 当前的GMT时间戳
      *
      * @access public
      * @var integer
      */
-    public static $serverTimeStamp;
+    public static $gmtTimeStamp;
 
     /**
      * 可以被直接转换的时间戳
@@ -45,11 +45,12 @@ class Typecho_Date
      * 初始化参数
      *
      * @access public
-     * @param integer $time 时间戳
+     * @param integer $gmtTime GMT时间戳
+     * @return void
      */
-    public function __construct($time = NULL)
+    public function __construct($gmtTime)
     {
-        $this->timeStamp = (NULL === $time ? self::time() : $time) + (self::$timezoneOffset - self::$serverTimezoneOffset);
+        $this->timeStamp = $gmtTime + (self::$timezoneOffset - self::$serverTimezoneOffset);
     }
 
     /**
@@ -85,7 +86,7 @@ class Typecho_Date
      */
     public function word()
     {
-        return Typecho_I18n::dateWord($this->timeStamp, self::time() + (self::$timezoneOffset - self::$serverTimezoneOffset));
+        return Typecho_I18n::dateWord($this->timeStamp, self::gmtTime() + (self::$timezoneOffset - self::$serverTimezoneOffset));
     }
 
     /**
@@ -112,21 +113,11 @@ class Typecho_Date
     /**
      * 获取GMT时间
      *
-     * @deprecated
-     * @return int
+     * @access public
+     * @return integer
      */
     public static function gmtTime()
     {
-        return self::time();
-    }
-
-    /**
-     * 获取服务器时间
-     *
-     * @return int
-     */
-    public static function time()
-    {
-        return self::$serverTimeStamp ? self::$serverTimeStamp : (self::$serverTimeStamp = time());
+        return self::$gmtTimeStamp ? self::$gmtTimeStamp : (self::$gmtTimeStamp = @gmmktime());
     }
 }

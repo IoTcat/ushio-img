@@ -306,7 +306,7 @@ class Widget_Archive extends Widget_Abstract_Contents
             $commentUrl .= '?parent=' . $reply;
         }
         
-        return $commentUrl;
+        return $this->options->commentsAntiSpam ? $commentUrl : $this->security->getTokenUrl($commentUrl);
     }
 
     /**
@@ -1223,7 +1223,7 @@ class Widget_Archive extends Widget_Abstract_Contents
      * 重载select
      *
      * @access public
-     * @return Typecho_Db_Query
+     * @return void
      */
     public function select()
     {
@@ -1350,7 +1350,7 @@ class Widget_Archive extends Widget_Abstract_Contents
                     $select = $this->select()->where('table.contents.status = ?', 'publish');
                 }
             }
-            $select->where('table.contents.created < ?', $this->options->time);
+            $select->where('table.contents.created < ?', $this->options->gmtTime);
         }
 
         /** handle初始化 */
@@ -1541,7 +1541,7 @@ class Widget_Archive extends Widget_Abstract_Contents
     public function theNext($format = '%s', $default = NULL, $custom = array())
     {
         $content = $this->db->fetchRow($this->select()->where('table.contents.created > ? AND table.contents.created < ?',
-            $this->created, $this->options->time)
+            $this->created, $this->options->gmtTime)
             ->where('table.contents.status = ?', 'publish')
             ->where('table.contents.type = ?', $this->type)
             ->where('table.contents.password IS NULL')
@@ -1662,7 +1662,6 @@ class Widget_Archive extends Widget_Abstract_Contents
         }
 
         $allows = $this->pluginHandle()->headerOptions($allows, $this);
-        $title = (empty($this->_archiveTitle) ? '' : $this->_archiveTitle . ' &raquo; ') . $this->options->title;
 
         $header = '';
         if (!empty($allows['description'])) {
@@ -1681,28 +1680,28 @@ class Widget_Archive extends Widget_Abstract_Contents
             $header .= '<meta name="template" content="' . $allows['template'] . '" />' . "\n";
         }
 
-        if (!empty($allows['pingback']) && 2 == $this->options->allowXmlRpc) {
+        if (!empty($allows['pingback'])) {
             $header .= '<link rel="pingback" href="' . $allows['pingback'] . '" />' . "\n";
         }
 
-        if (!empty($allows['xmlrpc']) && 0 < $this->options->allowXmlRpc) {
+        if (!empty($allows['xmlrpc'])) {
             $header .= '<link rel="EditURI" type="application/rsd+xml" title="RSD" href="' . $allows['xmlrpc'] . '" />' . "\n";
         }
 
-        if (!empty($allows['wlw']) && 0 < $this->options->allowXmlRpc) {
+        if (!empty($allows['wlw'])) {
             $header .= '<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="' . $allows['wlw'] . '" />' . "\n";
         }
 
         if (!empty($allows['rss2']) && $allowFeed) {
-            $header .= '<link rel="alternate" type="application/rss+xml" title="' . $title . ' &raquo; RSS 2.0" href="' . $allows['rss2'] . '" />' . "\n";
+            $header .= '<link rel="alternate" type="application/rss+xml" title="RSS 2.0" href="' . $allows['rss2'] . '" />' . "\n";
         }
 
         if (!empty($allows['rss1']) && $allowFeed) {
-            $header .= '<link rel="alternate" type="application/rdf+xml" title="' . $title . ' &raquo; RSS 1.0" href="' . $allows['rss1'] . '" />' . "\n";
+            $header .= '<link rel="alternate" type="application/rdf+xml" title="RSS 1.0" href="' . $allows['rss1'] . '" />' . "\n";
         }
 
         if (!empty($allows['atom']) && $allowFeed) {
-            $header .= '<link rel="alternate" type="application/atom+xml" title="' . $title . ' &raquo; ATOM 1.0" href="' . $allows['atom'] . '" />' . "\n";
+            $header .= '<link rel="alternate" type="application/atom+xml" title="ATOM 1.0" href="' . $allows['atom'] . '" />' . "\n";
         }
         
         if ($this->options->commentsThreaded && $this->is('single')) {
@@ -1795,36 +1794,35 @@ class Widget_Archive extends Widget_Abstract_Contents
 (function () {
     var event = document.addEventListener ? {
         add: 'addEventListener',
-        triggers: ['scroll', 'mousemove', 'keyup', 'touchstart'],
+        focus: 'focus',
         load: 'DOMContentLoaded'
     } : {
         add: 'attachEvent',
-        triggers: ['onfocus', 'onmousemove', 'onkeyup', 'ontouchstart'],
+        focus: 'onfocus',
         load: 'onload'
-    }, added = false;
+    };
 
     document[event.add](event.load, function () {
-        var r = document.getElementById('{$this->respondId}'),
-            input = document.createElement('input');
-        input.type = 'hidden';
-        input.name = '_';
-        input.value = " . Typecho_Common::shuffleScriptVar(
-            $this->security->getToken($this->request->getRequestUrl())) . "
+        var r = document.getElementById('{$this->respondId}');
 
         if (null != r) {
             var forms = r.getElementsByTagName('form');
             if (forms.length > 0) {
-                function append() {
-                    if (!added) {
-                        forms[0].appendChild(input);
-                        added = true;
-                    }
-                }
-            
-                for (var i = 0; i < event.triggers.length; i ++) {
-                    var trigger = event.triggers[i];
-                    document[event.add](trigger, append);
-                    window[event.add](trigger, append);
+                var f = forms[0], textarea = f.getElementsByTagName('textarea')[0] || f.text, added = false;
+
+                if (null != textarea && 'text' == textarea.name) {
+                    textarea[event.add](event.focus, function () {
+                        if (!added) {
+                            var input = document.createElement('input');
+                            input.type = 'hidden';
+                            input.name = '_';
+                            input.value = " . Typecho_Common::shuffleScriptVar(
+                                $this->security->getToken($this->request->getRequestUrl())) . "
+
+                            f.appendChild(input);
+                            added = true;
+                        }
+                    });
                 }
             }
         }
@@ -1949,9 +1947,7 @@ class Widget_Archive extends Widget_Abstract_Contents
         $this->checkPermalink();
         
         /** 添加Pingback */
-        if (2 == $this->options->allowXmlRpc) {
-            $this->response->setHeader('X-Pingback', $this->options->xmlRpcUrl);
-        }
+        $this->response->setHeader('X-Pingback', $this->options->xmlRpcUrl);
         $validated = false;
 
         //~ 自定义模板

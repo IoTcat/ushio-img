@@ -163,11 +163,8 @@ $(document).ready(function() {
     })();
     
     if (dstOffset > 0) {
-        $('<input name="dst" type="hidden" />').appendTo(form).val(dstOffset);
+        $('<input name="dst" type="hidden" />').insertAfter(form).val(dstOffset);
     }
-
-    // 时区
-    $('<input name="timezone" type="hidden" />').appendTo(form).val(- (new Date).getTimezoneOffset() * 60);
 
     // 自动保存
 <?php if ($options->autoSave): ?>

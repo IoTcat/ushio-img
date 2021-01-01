@@ -40,10 +40,7 @@
     		$this->header();
     	}
     ?>
-<script>lang = ['zh'];</script>
-<script src='https://cdn.yimian.xyz/ushio-js/ushio-head.min.js'></script>
-<script>page.proj = 'iotcat/ushio-img';</script>
-<script>//page.auth = ['any'];</script>
+    <script src="https://cdn.yimian.xyz/ushio-js/ushio-head.min.js"></script>
 </head>
 <body>
 <!--[if lt IE 8]>
@@ -94,7 +91,7 @@
 					</ul>
 				</li>
 			<?php else: ?>
-				<?php while ($cates->next()): ?>
+				<?php while (false&&$cates->next()): ?>
 					<?php if ($cates->levels === 0): ?>
 						<?php $children = $cates->getAllChildren($cates->mid); ?>
 						<?php if (empty($children)): ?>

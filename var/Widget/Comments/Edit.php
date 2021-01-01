@@ -309,7 +309,7 @@ class Widget_Comments_Edit extends Widget_Abstract_Comments implements Widget_In
         
             $comment = array(
                 'cid'       =>  $commentSelect['cid'],
-                'created'   =>  $this->options->time,
+                'created'   =>  $this->options->gmtTime,
                 'agent'     =>  $this->request->getAgent(),
                 'ip'        =>  $this->request->getIp(),
                 'ownerId'   =>  $commentSelect['ownerId'],

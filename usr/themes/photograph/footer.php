@@ -6,9 +6,7 @@
 	<p class="related" <?php if($this->options->noticeColor): ?>style="color: <?php $this->options->noticeColor() ?>"<?php endif; ?>>公告：<?php $this->options->notice() ?></p>
 	<?php endif; ?>
 	<!-- powered info -->
-	<?php if ($this->options->poweredby == 'y'): ?>
-	<p class="related"><a href="http://typecho.org/" target="_blank">POWERED BY TYPECHO</a> / <a href="https://photo.siitake.cn/photograph.html" target="_blank">THEME BY SIITAKE</a></p>
-	<?php endif; ?>
+	<p class="related">POWERED BY <a href="https://ushio.cool/">Ushio</a> / THEME BY <a href="https://photo.siitake.cn/photograph.html" target="_blank">SIITAKE</a></p>
 	<!-- kotkeys desc -->
 	<?php if(trim($this->options->hotKeys) != ''):
 		$hotKeys = getHotKeys($this->options->hotKeys);
@@ -21,10 +19,11 @@
 	<?php endif; ?>
 	<!-- counter -->
 	<?php if ($this->options->statCount == 'y'): $stat = statCount(); ?>
-	<p class="related">本站共<?php echo $stat['pic'] ?>张图片在<?php echo $stat['post'] ?>个相册中，他们被分成<?php echo $stat['cate'] ?>个类别，并有<?php echo $stat['page'] ?>个页面和<?php echo $stat['comm'] ?>条评论</p>
+	<p class="related">本站已收录<span id="picNum">??</span>张图片在<?php echo $stat['post'] ?>个相册中。本站已拥有<?php echo $stat['comm'] ?>条评论</p>
+    <script>$.get('https://api.yimian.xyz/img/getImgNum.php', function(res){var n = 0; res = JSON.parse(res); Object.keys(res).forEach(function(i){n += res[i]});$('#picNum').html(n)});</script>
 	<?php endif; ?>
 	<!-- copy & icp -->
-	<p class="related">&copy; <a href="<?php $this->options->siteUrl(); ?>" target="_blank"><?php $this->options->title(); ?></a><?php if ($this->options->icp): ?> <a href="http://beian.miit.gov.cn/" target="_blank"><?php $this->options->icp() ?></a><?php endif; ?></p>
+	<p class="related">&copy; <a href="https://iotcat.me/">IoTcat</a> 2019-<script>document.write(new Date().getFullYear())</script><?php if ($this->options->icp): ?> <a href="http://beian.miit.gov.cn/" target="_blank"><?php $this->options->icp() ?></a><?php endif; ?></p>
 	<?php if ($this->options->statistics): echo '<div style="display:none;">'; $this->options->statistics(); echo '</div>'; endif; ?>
 </footer><!-- end #footer -->
 <script type="text/javascript" src="<?php $this->options->themeUrl('js/jquery-3.3.1.min.js'); ?>"></script>
@@ -259,6 +258,6 @@
 	}
 </script>
 <?php $this->footer(); ?>
-<script src='https://cdn.yimian.xyz/ushio-js/ushio-footer.min.js'></script>
+<script src="https://cdn.yimian.xyz/ushio-js/ushio-footer.min.js"></script>
 </body>
 </html>

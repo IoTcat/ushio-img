@@ -39,7 +39,7 @@ abstract class Typecho_Db_Adapter_Pdo implements Typecho_Db_Adapter
      */
     public static function isAvailable()
     {
-        return class_exists('PDO');
+        return extension_loaded('pdo');
     }
 
     /**
