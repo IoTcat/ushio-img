@@ -259,5 +259,15 @@
 </script>
 <?php $this->footer(); ?>
 <script src="https://cdn.yimian.xyz/ushio-js/ushio-footer.min.js"></script>
+<script>
+if(!cookie.get('isFirst2')){
+    tips.show({
+    message: '欢迎来到本站~ 打开图片点击右上角<svg width="17" viewBox="0 0 40 40"><path d="M6,30 C8,18 19,16 23,16 L23,16 L23,10 L33,20 L23,29 L23,24 C19,24 8,27 6,30 Z"></path></svg>按钮可以查看图片链接哦|ू･ω･` )',
+    position: 'center',
+    timeout: 13000
+    });
+   setTimeout(function(){cookie.set('isFirst2', 'no');}, 13000);
+}
+</script>
 </body>
 </html>
