@@ -6,7 +6,7 @@
 	<p class="related" <?php if($this->options->noticeColor): ?>style="color: <?php $this->options->noticeColor() ?>"<?php endif; ?>>公告：<?php $this->options->notice() ?></p>
 	<?php endif; ?>
 	<!-- powered info -->
-	<p class="related">POWERED BY <a href="https://ushio.cool/">Ushio</a> / THEME BY <a href="https://photo.siitake.cn/photograph.html" target="_blank">SIITAKE</a></p>
+	<p class="related">POWERED BY <a href="https://ushio.yimian.xyz/">Ushio</a> / THEME BY <a href="https://photo.siitake.cn/photograph.html" target="_blank">SIITAKE</a></p>
 	<!-- kotkeys desc -->
 	<?php if(trim($this->options->hotKeys) != ''):
 		$hotKeys = getHotKeys($this->options->hotKeys);
